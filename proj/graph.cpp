@@ -254,7 +254,7 @@ string Graph::bellmanFord(int start, bool want_str){
     bool is_changed = 0;
     
     for(int i=0; i<node_count; ++i){
-        values[i] = -1;           // waga -1 oznacza węzeł nieodwiedzony
+        values[i] = INT_MAX;           // waga INT_MAX oznacza węzeł nieodwiedzony
     }
     values[start] = 0;
     parentIDs[start] = -1;        // rodzic -1 oznacza węzeł startowy
@@ -264,12 +264,10 @@ string Graph::bellmanFord(int start, bool want_str){
         // Dla każdej krawędzi
         for(int j=0; j<edge_count; ++j){
             // Jeśli startowy węzeł nie został odwiedzony, pomiń
-            if(values[edges[j].getStart()->getIndex()] == -1){ continue; }
+            if(values[edges[j].getStart()->getIndex()] == INT_MAX){ continue; }
 
-            // Jeśli końcowy węzeł krawędzi nie został odwiedzony ||
-            //    || jego waga jest większa od wagi węzła startowego plus wagi krawędzi
-            if(values[edges[j].getEnd()->getIndex()] == -1 || 
-               values[edges[j].getEnd()->getIndex()] > values[edges[j].getStart()->getIndex()] + edges[j].getWeight()){   
+            // Jeśli waga końcowego węzła jest większa od wagi węzła startowego plus wagi krawędzi
+            if(values[edges[j].getEnd()->getIndex()] > values[edges[j].getStart()->getIndex()] + edges[j].getWeight()){   
                 // Przypisz nową, mniejszą wagę węzłowi końcowemu
                 values[edges[j].getEnd()->getIndex()] = values[edges[j].getStart()->getIndex()] + edges[j].getWeight();
                 // Ustaw odpowiedniego rodzica
